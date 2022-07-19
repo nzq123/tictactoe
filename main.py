@@ -2,78 +2,62 @@ tab = []
 for j in range(3):
     tab.append([j * 3 + 1, j * 3 + 2, j * 3 + 3])
 
-field = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+field = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
 
-def p1_is_win():
-    if field[0][0] == "X" and field[0][1] == "X" and field[0][2] == "X":
-        return True
-    elif field[0][0] == "X" and field[1][0] == "X" and field[2][0] == "X":
-        return True
-    elif field[0][0] == "X" and field[1][1] == "X" and field[2][2] == "X":
-        return True
-    elif field[1][0] == "X" and field[1][1] == "X" and field[1][2] == "X":
-        return True
-    elif field[2][0] == "X" and field[2][1] == "X" and field[2][2] == "X":
-        return True
-    elif field[2][0] == "X" and field[1][1] == "X" and field[0][2] == "X":
-        return True
-    elif field[0][1] == "X" and field[1][1] == "X" and field[2][1] == "X":
-        return True
-    elif field[0][2] == "X" and field[1][2] == "X" and field[2][2] == "X":
+
+def is_win(num):
+    if field[0][0] == num and field[0][1] == num and field[0][2] == num or\
+        field[0][0] == num and field[1][0] == num and field[2][0] == num or\
+        field[0][0] == num and field[1][1] == num and field[2][2] == num or\
+        field[1][0] == num and field[1][1] == num and field[1][2] == num or\
+        field[2][0] == num and field[2][1] == num and field[2][2] == num or\
+        field[2][0] == num and field[1][1] == num and field[0][2] == num or\
+        field[0][1] == num and field[1][1] == num and field[2][1] == num or\
+        field[0][2] == num and field[1][2] == num and field[2][2] == num:
         return True
 
 
-def p2_is_win():
-    if field[0][0] == "O" and field[0][1] == "O" and field[0][2] == "O":
-        return True
-    elif field[0][0] == "O" and field[1][0] == "O" and field[2][0] == "O":
-        return True
-    elif field[0][0] == "O" and field[1][1] == "O" and field[2][2] == "O":
-        return True
-    elif field[1][0] == "O" and field[1][1] == "O" and field[1][2] == "O":
-        return True
-    elif field[2][0] == "O" and field[2][1] == "O" and field[2][2] == "O":
-        return True
-    elif field[2][0] == "O" and field[1][1] == "O" and field[0][2] == "O":
-        return True
-    elif field[0][1] == "O" and field[1][1] == "O" and field[2][1] == "O":
-        return True
-    elif field[0][2] == "O" and field[1][2] == "O" and field[2][2] == "O":
-        return True
-
-
-game = 1
-while game <= 5:
-    a = int(input("Gracz 1 podaję pierwsze pole: "))
-    b = int(input("Gracz 1 podaję drugie pole: "))
+def answer(player):
+    a = int(input(f"Gracz {player} podaję pierwsze pole: "))
+    while a < 0:
+        a = int(input("Podaj dodatnią liczbę: "))
+    b = int(input(f"Gracz {player} podaję drugie pole: "))
+    while b < 0:
+        b = int(input("Podaj dodatnią liczbę: "))
     while field[a][b] == "X" or field[a][b] == "O":
         print("Nie możesz zagrać na polu przeciwnika")
-        a = int(input("Gracz 1 podaję pierwsze pole: "))
-        b = int(input("Gracz 1 podaję drugie pole: "))
-    else:
+        a = int(input(f"Gracz {player} podaję pierwsze pole: "))
+        b = int(input(f"Gracz {player} podaję drugie pole: "))
+    return a, b
+
+
+try:
+    game = 1
+    while game <= 5:
+        a, b = answer(1)
         field[a][b] = "X"
-    for i in field:
-        print(i)
-    if p1_is_win() is True:
-        print("Gracz 1 wygrał")
-        break
+        for i in field:
+            print(i)
+        if is_win("X") is True:
+            print("Gracz 1 wygrał")
+            break
 
-    if game == 5:
-        break
+        if game == 5:
+            print("Gracze zremisowali")
+            break
 
-    a = int(input("Gracz 2 podaję pierwsze pole: "))
-    b = int(input("Gracz 2 podaję drugie pole: "))
-    while field[a][b] == "X" or field[a][b] == "O":
-        print("Nie możesz zagrać na polu przeciwnika")
-        a = int(input("Gracz 2 podaję pierwsze pole: "))
-        b = int(input("Gracz 2 podaję drugie pole: "))
-    else:
+        a, b = answer(2)
         field[a][b] = "O"
-    for i in field:
-        print(i)
-    if p2_is_win() is True:
-        print("Gracz 2 wygrał")
-        break
+        for i in field:
+            print(i)
+        if is_win("0") is True:
+            print("Gracz 2 wygrał")
+            break
 
-    game += 1
+        game += 1
 
+
+except IndexError:
+    print("Wyszedłeś poza plansze")
+except ValueError:
+    print("Musisz podać liczbę od 0 do 2")
